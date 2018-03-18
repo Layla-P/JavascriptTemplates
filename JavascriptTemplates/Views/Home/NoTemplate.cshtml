@@ -1,0 +1,96 @@
+﻿@using JavascriptTemplates.Models
+@model VideoGamesList
+
+<div class="" id="games-container">
+    <div class="mb-2">
+        <div class="float-right">
+            <button class="btn btn-sm btn-primary" type="button" id="add-game-item" aria-haspopup="true" aria-expanded="true">
+                Add Game
+            </button>
+        </div>
+        <h5>Games</h5>
+    </div>
+    <div class="">
+        <table id="games-table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Genre</th>
+                    <th>Star Rating</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="games-table-body">
+                @foreach (var game in Model.VideoGames)
+            {
+                    <tr>
+                        <td>@game.Id</td>
+                        <td>@game.Name</td>
+                        <td>@game.Genre</td>
+                        <td>
+                            @for (var i = 0; i < game.StarRating; i++)
+                            {
+                                <i class="fa fa-star"></i>
+                            }
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="float-right">
+            <button type="submit" class="btn btn-sm btn-success">Save</button>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        $(function() {
+
+            var starTotal = 3;
+
+
+            var genres = @Html.Raw(Json.Serialize(@Model.Genres));
+
+            var options = GetSelectList(genres);
+            var ratings = GetSelectList(["one", "two","three"]);
+
+            var newRow = '<tr>' +
+                '<td></td>' +
+                '<td><input type="text" name="Name" class="form-control"/></td>' +
+                '<td>' +
+                options +
+                '</td>' +
+                '<td>' +
+                ratings +
+                '<td></td>'+
+                '</tr>' ;
+
+            function GetSelectList(optionsList) {
+                var frag = '<select class="form-control">';
+                for (var i = 0; i < optionsList.length; i++) {
+                    frag += '<option value="' + optionsList[i] + '">' + optionsList[i] + '</option>';
+                }
+                frag += '</select>';
+                return frag;
+            };
+
+
+
+        $('div#games-container').off('click', '#add-game-item');
+        $('div#games-container').on('click',
+            '#add-game-item',
+            function () {
+
+                $('#games-table-body').append(newRow);
+
+                return false;
+            });
+        });
+
+
+    </script>
+}

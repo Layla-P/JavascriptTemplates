@@ -1,0 +1,1 @@
+# JavaScript Template - a demo project to show templating
