@@ -14,7 +14,6 @@
         <table id="games-table" class="table table-striped">
             <thead>
                 <tr>
-                    <th>Id</th>
                     <th>Name</th>
                     <th>Genre</th>
                     <th>Star Rating</th>
@@ -25,7 +24,6 @@
                 @foreach (var game in Model.VideoGames)
             {
                     <tr>
-                        <td>@game.Id</td>
                         <td>@game.Name</td>
                         <td>@game.Genre</td>
                         <td>
@@ -34,14 +32,11 @@
                                 <i class="fa fa-star"></i>
                             }
                         </td>
-                        <td></td>
+                        <td><button class="btn btn-light float-right" data-delete><i class="fa fa-trash"></i></button></td>
                     </tr>
                 }
             </tbody>
         </table>
-        <div class="float-right">
-            <button type="submit" class="btn btn-sm btn-success">Save</button>
-        </div>
     </div>
 </div>
 
@@ -53,20 +48,19 @@
             var starTotal = 3;
 
 
-            var genres = @Html.Raw(Json.Serialize(@Model.Genres));
+            var genres = @Html.Raw(Json.Serialize(Model.Genres));
 
             var options = GetSelectList(genres);
             var ratings = GetSelectList(["one", "two","three"]);
 
             var newRow = '<tr>' +
-                '<td></td>' +
                 '<td><input type="text" name="Name" class="form-control"/></td>' +
                 '<td>' +
                 options +
                 '</td>' +
                 '<td>' +
                 ratings +
-                '<td></td>'+
+                '<td><a href=""><i class="fa fa-trash"></i></a></td>'+
                 '</tr>' ;
 
             function GetSelectList(optionsList) {
@@ -80,17 +74,25 @@
 
 
 
-        $('div#games-container').off('click', '#add-game-item');
-        $('div#games-container').on('click',
-            '#add-game-item',
+            $('div#games-container').off('click', '#add-game-item');
+            $('div#games-container').on('click',
+                '#add-game-item',
+                function () {
+
+                    $('#games-table-body').append(newRow);
+
+                    return false;
+                });
+
+
+            $('div#games-container').off('click', '[data-delete]');
+            $('div#games-container').on('click',
+            '[data-delete]',
             function () {
-
-                $('#games-table-body').append(newRow);
-
+                $(this).parents('tr').remove();
                 return false;
             });
         });
-
 
     </script>
 }

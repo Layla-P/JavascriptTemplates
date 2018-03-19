@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using JavascriptTemplates.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,6 +25,12 @@ namespace JavascriptTemplates
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddScoped<IVideoGameRepository, VideoGameRepository>();
+
+            var connection = Configuration.GetConnectionString("JsConnectionString");
+            services.AddDbContext<JsContext>(options => options.UseSqlServer(connection));
+
             // Add framework services.
             services.AddMvc();
         }
